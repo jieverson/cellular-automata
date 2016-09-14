@@ -1,0 +1,84 @@
+<html>
+<head>
+    <style>
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .cell {
+            display: inline-block;
+            height: 10px;
+        }
+
+        .active {
+            background-color: #558B3D;
+        }
+
+        .inactive {
+            background-color: #1E1E1E;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <script>
+        const number_of_cells = 200
+        const rand = () => Math.random() > 0.5
+        
+        let row = document.createElement('div')
+        document.body.appendChild(row)
+        for(let i = 0; i < number_of_cells; i++){
+            let cell = document.createElement('div')
+            cell.classList.add('cell')
+            cell.classList.add(rand() ? 'active' : 'inactive')
+            row.appendChild(cell)
+        }
+
+        let last_row = row
+
+        function nextRow(){
+            let row = document.createElement('div')
+            document.body.appendChild(row)
+            for(let i = 0; i < number_of_cells; i++){
+                let cell = document.createElement('div')
+                cell.classList.add('cell')
+                cell.style.width = window.innerWidth / number_of_cells
+
+                const value = cell => cell.classList.contains('active')
+
+                let children = last_row.children
+                let left = value(children[i - 1] || children[number_of_cells - 1])
+                let center = value(children[i])
+                let right = value(children[i + 1] || children[0]) 
+                
+                let active = 
+                    rule(1,1,1)
+                    .and(1,0,0)
+                    .and(0,1,0)
+                    .and(0,0,1)
+                    .eval(left, center, right)
+
+                cell.classList.add(active ? 'active' : 'inactive')
+                row.appendChild(cell)
+            }
+            last_row = row
+        }
+
+        function rule(a, b, c, rules){
+            rules = rules || []
+            rules.push([a,b,c])
+
+            return {
+                rules: rules,
+                and: (a,b,c) => rule(a,b,c, rules),
+                eval: (a,b,c) => 
+                    rules.some(x => x[0] == a && x[1] == b && x[2] == c)
+            }
+        }
+
+        setInterval(nextRow, 100)
+    </script>
+</body>
+</html>
