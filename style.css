@@ -1,0 +1,17 @@
+body{
+    margin: 0;
+    overflow: hidden;
+}
+    
+.cell {
+    display: inline-block;
+    height: 10px;
+}
+
+.active {
+    background-color: #558B3D;
+}
+
+.inactive {
+    background-color: #1E1E1E;
+}
