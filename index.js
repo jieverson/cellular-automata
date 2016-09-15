@@ -1,4 +1,4 @@
-const number_of_cells = 200
+const number_of_cells = 100
 
 let last_row
 
@@ -25,13 +25,19 @@ function get_rule_class(cell, i) {
     return active ? 'active' : 'inactive'
 }
 
+function createCell() {
+    let cell = document.createElement('div')
+    cell.classList.add('cell')
+    cell.style.width = window.innerWidth / number_of_cells
+    cell.style.height = cell.style.width
+    return cell
+}
+
 function createRow(get_class) {
     let row = document.createElement('div')
     document.body.appendChild(row)
     for (let i = 0; i < number_of_cells; i++) {
-        let cell = document.createElement('div')
-        cell.classList.add('cell')
-        cell.style.width = window.innerWidth / number_of_cells
+        let cell = createCell()
         cell.classList.add(get_class(cell, i))
         row.appendChild(cell)
     }
